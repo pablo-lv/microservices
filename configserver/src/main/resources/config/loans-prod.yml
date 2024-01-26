@@ -1,12 +1,11 @@
 build:
-  version: "3.0"
+  version: "1.0"
 
-accounts:
-  message: "Welcome to Accounts Service"
+loans:
+  message: "Welcome to Loans Service"
   contactDetails:
     name: "Pablo Lucas"
     email: "pablo.lucv@gmail.com"
   onCallSupport:
     - (555) 555-5555
     - (666) 666-6666
-
