@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: qa
+
+build:
+  version: "2.0"
+
+accounts:
+  message: "Welcome to Accounts Service"
+  contactDetails:
+    name: "Pablo Lucas QA LEAD"
+    email: "pablo.lucv@gmail.com"
+  onCallSupport:
+    - (555) 555-5555
+    - (666) 666-6666

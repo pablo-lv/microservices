@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+build:
+  version: "1.0"
+
+loans:
+  message: "Welcome to Loans Service"
+  contactDetails:
+    name: "Pablo Lucas"
+    email: "pablo.lucv@gmail.com"
+  onCallSupport:
+    - (555) 555-5555
+    - (666) 666-6666

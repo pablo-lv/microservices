@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+build:
+  version: "1.0"
+
+accounts:
+  message: "Welcome to Accounts Service"
+  contactDetails:
+    name: "Pablo Lucas - Product Owner"
+    email: "pablo.lucv@gmail.com"
+  onCallSupport:
+    - (555) 555-5555
+    - (666) 666-6666
