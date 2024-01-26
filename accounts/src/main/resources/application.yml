@@ -14,3 +14,16 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+build:
+  version: "1.0"
+
+accounts:
+  message: "Welcome to Accounts Service"
+  contactDetails:
+    name: "Pablo Lucas"
+    email: "pablo.lucv@gmail.com"
+  onCallSupport:
+    - (555) 555-5555
+    - (666) 666-6666
+

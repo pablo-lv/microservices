@@ -66,11 +66,21 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.4.0</version>
+				<configuration>
+					<to>
+						<image>pablolucv/${project.artifactId}:s4</image>
+					</to>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>pablolucv/${project.artifactId}:s4</name>
+						<name>pablolucv/${project.artifactId}:s6</name>
 					</image>
 					<excludes>
 						<exclude>
