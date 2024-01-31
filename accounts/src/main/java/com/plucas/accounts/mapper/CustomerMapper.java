@@ -1,6 +1,7 @@
 package com.plucas.accounts.mapper;
 
 import com.plucas.accounts.dto.CustomerDTO;
+import com.plucas.accounts.dto.CustomerDetailsDTO;
 import com.plucas.accounts.entity.Customer;
 
 public class CustomerMapper {
@@ -9,6 +10,13 @@ public class CustomerMapper {
         customerDto.setEmail(customer.getEmail());
         customerDto.setMobileNumber(customer.getMobileNumber());
         return customerDto;
+    }
+
+    public static CustomerDetailsDTO mapToCustomerDetailsDto(Customer customer, CustomerDetailsDTO customerDetailsDTO) {
+        customerDetailsDTO.setName(customer.getName());
+        customerDetailsDTO.setEmail(customer.getEmail());
+        customerDetailsDTO.setMobileNumber(customer.getMobileNumber());
+        return customerDetailsDTO;
     }
 
     public static Customer mapToCustomer(CustomerDTO customerDto, Customer customer) {
