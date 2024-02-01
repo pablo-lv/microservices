@@ -14,6 +14,9 @@ cd cards/ && mvn compile jib:dockerBuild
 cd ..
 # Change directory to /loans and execute mvn compile jib:dockerBuild
 cd loans/ && mvn compile jib:dockerBuild
+cd ..
+# Change directory to /gatewayserver and execute mvn compile jib:dockerBuild
+cd gatewayserver/ && mvn compile jib:dockerBuild
 
 
 

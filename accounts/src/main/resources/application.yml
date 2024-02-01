@@ -40,8 +40,16 @@ management:
   endpoint:
     shutdown:
       enabled: true
+    health:
+      probes:
+        enabled: true
   info:
     env:
+      enabled: true
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
       enabled: true
 
 endpoints:
@@ -62,3 +70,9 @@ info:
     name: "accounts"
     description: "Accounts Microservice"
     version: "1.0.0"
+
+logging:
+  level:
+    com:
+      plucas:
+        accounts: DEBUG
