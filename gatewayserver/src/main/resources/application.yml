@@ -28,6 +28,14 @@ info:
     description: "Gateway Server"
     version: "1.0.0"
 
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 60s
+
 logging:
   level:
     com:

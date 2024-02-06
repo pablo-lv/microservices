@@ -20,7 +20,8 @@ public class GatewayserverApplication {
 		return routeLocatorBuilder.routes()
 				.route(p -> p.path("/banknet/accounts/**").filters(
 						f-> f.rewritePath("/banknet/accounts/(?<segment>.*)", "/${segment}")
-								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+								.circuitBreaker(c -> c.setName("contactSupport").setFallbackUri("forward:/accountServiceFallback")))
 						.uri("lb://ACCOUNTS"))
 				.route(p -> p.path("/banknet/cards/**").filters(
 								f-> f.rewritePath("/banknet/cards/(?<segment>.*)", "/${segment}")
