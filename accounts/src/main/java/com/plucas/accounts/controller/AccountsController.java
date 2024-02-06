@@ -6,6 +6,7 @@ import com.plucas.accounts.dto.CustomerDTO;
 import com.plucas.accounts.dto.ErrorResponseDTO;
 import com.plucas.accounts.dto.ResponseDTO;
 import com.plucas.accounts.service.IAccountsService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -28,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class AccountsController {
+
+    final Logger logger = LoggerFactory.getLogger(AccountsController.class);
 
     private final IAccountsService iAccountsService;
 
@@ -95,9 +100,16 @@ public class AccountsController {
                 .body(new ResponseDTO(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_DELETE, mobileNumber));
     }
 
+    @Retry(name = "retryService", fallbackMethod = "getBuildVersionFallback")
     @GetMapping("/build-info")
     public ResponseEntity<String> getBuildVersion() {
+        logger.debug("getBuildVersion() method invoked");
         return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+    }
+
+    public ResponseEntity<String> getBuildVersionFallback(Throwable throwable) {
+        logger.debug("getBuildVersionFallback() method invoked");
+        return ResponseEntity.status(HttpStatus.OK).body("Fallback: " + "0.9");
     }
 
     @GetMapping("/java-version")
