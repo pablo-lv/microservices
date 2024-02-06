@@ -6,6 +6,7 @@ import com.plucas.accounts.dto.CustomerDTO;
 import com.plucas.accounts.dto.ErrorResponseDTO;
 import com.plucas.accounts.dto.ResponseDTO;
 import com.plucas.accounts.service.IAccountsService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -112,9 +113,16 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body("Fallback: " + "0.9");
     }
 
+
+    @RateLimiter(name = "getJavaVersion", fallbackMethod = "getJavaVersionFallback")
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
+    }
+
+    public ResponseEntity<String> getJavaVersionFallback(Throwable throwable) {
+        logger.debug("getBuildVersionFallback() method invoked");
+        return ResponseEntity.status(HttpStatus.OK).body("Fallback: " + "Java 17");
     }
 
     @GetMapping("/contact-info")

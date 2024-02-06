@@ -55,6 +55,10 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -80,7 +84,7 @@
 				<version>3.4.0</version>
 				<configuration>
 					<to>
-						<image>pablolucv/${project.artifactId}:s9</image>
+						<image>pablolucv/${project.artifactId}:s10</image>
 					</to>
 				</configuration>
 			</plugin>
