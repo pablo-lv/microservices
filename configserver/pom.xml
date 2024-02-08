@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<otel.version>1.32.0</otel.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -31,6 +32,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry.javaagent</groupId>
+			<artifactId>opentelemetry-javaagent</artifactId>
+			<version>${otel.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.cloud</groupId>-->
@@ -65,7 +76,7 @@
 				<version>3.4.0</version>
 				<configuration>
 					<to>
-						<image>pablolucv/${project.artifactId}:s10</image>
+						<image>pablolucv/${project.artifactId}:s11</image>
 					</to>
 				</configuration>
 			</plugin>

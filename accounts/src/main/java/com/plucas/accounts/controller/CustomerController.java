@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
-public class ConsumerController {
+public class CustomerController {
 
-    private final Logger logger = LoggerFactory.getLogger(ConsumerController.class);
+    private final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     private final ICustomerService iCustomerService;
 
-    public ConsumerController(ICustomerService iCustomerService) {
+    public CustomerController(ICustomerService iCustomerService) {
         this.iCustomerService = iCustomerService;
     }
 
@@ -32,7 +32,9 @@ public class ConsumerController {
             @RequestParam @Pattern(regexp = "(^$|[0-9]{10})", message = "MobileNumber should 10 digits")
             String mobileNumber) {
         logger.debug("banknet-correlation-id: {}", correlationId);
+        logger.debug("fetchCustomerDetails method started");
         CustomerDetailsDTO customerDetailsDTO = iCustomerService.fetchCustomerDetails(mobileNumber, correlationId);
+        logger.debug("fetchCustomerDetails method ended");
         return ResponseEntity.status(HttpStatus.OK).body(customerDetailsDTO);
     }
 }
