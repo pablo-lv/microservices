@@ -111,7 +111,7 @@
 				<version>3.4.0</version>
 				<configuration>
 					<to>
-						<image>pablolucv/${project.artifactId}:s11</image>
+						<image>pablolucv/${project.artifactId}:s12</image>
 					</to>
 				</configuration>
 			</plugin>
@@ -120,7 +120,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>pablolucv/${project.artifactId}:s11</name>
+						<name>pablolucv/${project.artifactId}:s12</name>
 					</image>
 					<excludes>
 						<exclude>

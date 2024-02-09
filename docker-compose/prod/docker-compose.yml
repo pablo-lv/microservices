@@ -1,4 +1,17 @@
 services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.1
+    container_name: keycloak
+    ports:
+      - "7080:8080"
+    environment:
+      KEYCLOAK_ADMIN: "admin"
+      KEYCLOAK_ADMIN_PASSWORD: "admin"
+    command: "start-dev"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
   read:
     image: grafana/loki:2.9.2
     command: "-config.file=/etc/loki/config.yaml -target=read"
@@ -255,7 +268,7 @@ services:
 #      service: microservice-db-config
 
   configserver:
-    image: "pablolucv/configserver:s11"
+    image: "pablolucv/configserver:s12"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -275,7 +288,7 @@ services:
       OTEL_SERVICE_NAME: "configserver"
 
   eurekaserver:
-    image: "pablolucv/eurekaserver:s11"
+    image: "pablolucv/eurekaserver:s12"
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -296,10 +309,10 @@ services:
 #    depends_on:
 #      accountsdb:
 #        condition: service_healthy
-    image: "pablolucv/accounts:s11"
+    image: "pablolucv/accounts:s12"
     container_name: accounts-ms
-    ports:
-      - "8080:8080"
+#    ports:
+#      - "8080:8080"
     environment:
       SPRING_APPLICATION_NAME: "accounts"
       OTEL_SERVICE_NAME: "accounts"
@@ -315,7 +328,7 @@ services:
       start_period: 10s
 
   loans:
-    image: "pablolucv/loans:s11"
+    image: "pablolucv/loans:s12"
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -337,7 +350,7 @@ services:
       start_period: 10s
 
   cards:
-    image: "pablolucv/cards:s11"
+    image: "pablolucv/cards:s12"
     container_name: cards-ms
     ports:
       - "9000:9000"
@@ -359,7 +372,7 @@ services:
       start_period: 10s
 
   gatewayserver:
-    image: "pablolucv/gatewayserver:s11"
+    image: "pablolucv/gatewayserver:s12"
     container_name: gatewayserver-ms
     ports:
       - "8072:8072"
@@ -375,6 +388,7 @@ services:
     environment:
       SPRING_APPLICATION_NAME: "gatewayserver"
       OTEL_SERVICE_NAME: "gatewayserver"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://keycloak:8080/realms/master/protocol/openid-connect/certs"
 #      SPRING_DATA_REDIS_HOST: "redis"
 #      SPRING_DATA_REDIS_PORT: "6379"
 #      SPRING_DATA_REDIS_TIMEOUT: "2s"
