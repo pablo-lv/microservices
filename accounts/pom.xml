@@ -104,6 +104,14 @@
 			<version>${otel.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -125,7 +133,7 @@
 				<version>3.4.0</version>
 				<configuration>
 					<to>
-						<image>pablolucv/${project.artifactId}:s12</image>
+						<image>pablolucv/${project.artifactId}:s13</image>
 					</to>
 				</configuration>
 			</plugin>

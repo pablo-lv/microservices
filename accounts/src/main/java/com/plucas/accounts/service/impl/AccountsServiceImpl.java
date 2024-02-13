@@ -2,6 +2,7 @@ package com.plucas.accounts.service.impl;
 
 import com.plucas.accounts.constants.AccountsConstants;
 import com.plucas.accounts.dto.AccountsDTO;
+import com.plucas.accounts.dto.AccountsMsgDTO;
 import com.plucas.accounts.dto.CustomerDTO;
 import com.plucas.accounts.entity.Accounts;
 import com.plucas.accounts.entity.Customer;
@@ -13,7 +14,10 @@ import com.plucas.accounts.repository.AccountsRepository;
 import com.plucas.accounts.repository.CustomerRepository;
 import com.plucas.accounts.service.IAccountsService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.cloud.stream.function.StreamBridge;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -23,8 +27,12 @@ import java.util.Random;
 @AllArgsConstructor
 public class AccountsServiceImpl implements IAccountsService {
 
+    private static final Logger log = LoggerFactory.getLogger(AccountsServiceImpl.class);
+
     private AccountsRepository accountsRepository;
     private CustomerRepository customerRepository;
+
+    private final StreamBridge streamBridge;
 
     @Override
     public void createAccount(CustomerDTO customerDTO) {
@@ -36,6 +44,14 @@ public class AccountsServiceImpl implements IAccountsService {
         Customer customer = CustomerMapper.mapToCustomer(customerDTO, new Customer());
         Customer savedCustomer = customerRepository.save(customer);
         Accounts accounts = accountsRepository.save(createNewAccount(savedCustomer));
+        sendCommunication(accounts, savedCustomer);
+    }
+
+    private void sendCommunication(Accounts accounts, Customer customer) {
+        var accountsMsgDTO = new AccountsMsgDTO(accounts.getAccountNumber(), customer.getName(), customer.getEmail(), customer.getMobileNumber());
+        log.info("Sending message to the communication service: " + accountsMsgDTO);
+        var result = streamBridge.send("sendCommunication-out-0", accountsMsgDTO);
+        log.info("Is the communication request triggered? " + result);
     }
 
     /**
@@ -105,4 +121,18 @@ public class AccountsServiceImpl implements IAccountsService {
         return true;
     }
 
+    @Override
+    public boolean updateCommunicationStatus(Long accountNumber) {
+        boolean isUpdated = false;
+
+        if (accountNumber != null) {
+            Accounts accounts = accountsRepository.findById(accountNumber).orElseThrow(
+                    ()->new ResourceNotFoundException("Account", "AccountNumber", accountNumber.toString())
+            );
+            accounts.setCommunicationSw(true);
+            accountsRepository.save(accounts);
+            isUpdated = true;
+        }
+        return isUpdated;
+    }
 }
