@@ -222,21 +222,21 @@ services:
 #    extends:
 #      file: common-config.yml
 #      service: network-deploy-service
-#  rabbit:
-#    image: rabbitmq:3.12-management
-#    hostname: rabbitmq
-#    ports:
-#      - "5672:5672"
-#      - "15672:15672"
-#    healthcheck:
-#      test: rabbitmq-diagnostics check_port_connectivity
-#      interval: 10s
-#      timeout: 5s
-#      retries: 10
-#      start_period: 5s
-#    extends:
-#      file: common-config.yml
-#      service: network-deploy-service
+  rabbit:
+    image: rabbitmq:3.12-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 #  accountsdb:
 #    container_name: accountsdb
 #    ports:
@@ -268,7 +268,7 @@ services:
 #      service: microservice-db-config
 
   configserver:
-    image: "pablolucv/configserver:s12"
+    image: "pablolucv/configserver:s13"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -288,7 +288,7 @@ services:
       OTEL_SERVICE_NAME: "configserver"
 
   eurekaserver:
-    image: "pablolucv/eurekaserver:s12"
+    image: "pablolucv/eurekaserver:s13"
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -306,16 +306,19 @@ services:
       OTEL_SERVICE_NAME: "eurekaserver"
 
   accounts:
-#    depends_on:
+    depends_on:
+      rabbit:
+        condition: service_healthy
 #      accountsdb:
 #        condition: service_healthy
-    image: "pablolucv/accounts:s12"
+    image: "pablolucv/accounts:s13"
     container_name: accounts-ms
 #    ports:
 #      - "8080:8080"
     environment:
       SPRING_APPLICATION_NAME: "accounts"
       OTEL_SERVICE_NAME: "accounts"
+      SPRING_RABBITMQ_HOST: "rabbit"
 #      SPRING_DATASOURCE_URL: "jdbc:mysql://accountsdb:3306/accountsdb"
     extends:
       file: common-config.yml
@@ -328,7 +331,7 @@ services:
       start_period: 10s
 
   loans:
-    image: "pablolucv/loans:s12"
+    image: "pablolucv/loans:s13"
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -350,7 +353,7 @@ services:
       start_period: 10s
 
   cards:
-    image: "pablolucv/cards:s12"
+    image: "pablolucv/cards:s13"
     container_name: cards-ms
     ports:
       - "9000:9000"
@@ -371,8 +374,20 @@ services:
       retries: 20
       start_period: 10s
 
+  message:
+    image: "eazybytes/message:s13"
+    container_name: message-ms
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    environment:
+      SPRING_RABBITMQ_HOST: "rabbit"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
   gatewayserver:
-    image: "pablolucv/gatewayserver:s12"
+    image: "pablolucv/gatewayserver:s13"
     container_name: gatewayserver-ms
     ports:
       - "8072:8072"
